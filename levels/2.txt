@@ -1,0 +1,1 @@
+Calculate the somme of the first 10 numbers and puts the result in X

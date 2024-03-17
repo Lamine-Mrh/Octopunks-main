@@ -1,0 +1,37 @@
+*****************************************************************Menu*****************************************************************
+______________________________________________________________________________________________________________________________
+
+                                                     Welcome to Exapunks game ! *.*
+
+
+*** Agreements !!! ***
+
+    ** There are two standard registers: X and T **
+
+    ** Robot Instructions |> **
+
+      * COPY source(R/N) dest(R)  :  Copies source to dest. *
+
+      * ADDI a(R/N) b(R/N) dest(R):  Adds a + b and saves the result in dest. *
+
+      * SUBI a(R/N) b(R/N) dest(R):  Subtracts a - b and saves the result in dest. *
+
+      * MULI a(R/N) b(R/N) dest(R):  Multiplies a * b and saves the result in dest. *
+
+      * DIVI a(R/N) b(R/N) dest(R):  Divide a / b and saves the result in dest. *
+
+      * MODI a(R/N) b(R/N) dest(R):  Calculate a mod b and saves the result in dest. *
+      
+      * SWIZ a(R/N) b(R/N) dest(R):  Swizzle a by b and saves the result in dest. *
+
+      * TEST a(R/N) = b(R/N)      :  Test if a = b and put 1 in T if true, 0 if not (Can also use < and >). *
+
+      * LINK a(R/N)               :  Move the robot to the next cell (0: Up, 1: Right, 2: Down, 3: Left)
+
+      * JUMP dest(L)              :  Jump execution to label dest. *
+
+      * FJMP dest(L)              :  Jump execution to label dest if T is zero. *
+
+      * NOOP                      :  Do nothing. *
+
+      * HALT                      :  Halt the EXA. *

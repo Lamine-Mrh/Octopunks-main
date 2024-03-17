@@ -1,0 +1,1 @@
+Calculate the somme of X and T registers
