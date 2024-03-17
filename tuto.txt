@@ -1,36 +1,40 @@
-*****************************************************************Menu*****************************************************************
-_________________________________________________________________________________________________
-                                                                                   Welcome to Octopunk  ! *.*
+System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════╗");
+System.out.println("║                      Welcome to Octopunk  ! *.*                                        ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║                                 *** Agreements !!! ***                                 ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║  - There are two standard registers: X and T                                           ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║  - Robot Instructions |>                                                               ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * COPY source(R/N) dest(R)  :  Copies source to dest.                               ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * ADDI a(R/N) b(R/N) dest(R):  Adds a + b and saves the result in dest.             ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * SUBI a(R/N) b(R/N) dest(R):  Subtracts a - b and saves the result in dest.        ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * MULI a(R/N) b(R/N) dest(R):  Multiplies a * b and saves the result in dest.       ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * DIVI a(R/N) b(R/N) dest(R):  Divide a / b and saves the result in dest.           ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * MODI a(R/N) b(R/N) dest(R):  Calculate a mod b and saves the result in dest.      ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * SWIZ a(R/N) b(R/N) dest(R):  Swizzle a by b and saves the result in dest.         ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * TEST a(R/N) = b(R/N)      :  Test if a = b and put 1 in T if true, 0 if not.      ║");
+System.out.println("║                                    (Can also use < and >).                             ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * LINK a(R/N)               :  Move the robot to the next cell                      ║");
+System.out.println("║                                   (0: Up, 1: Right, 2: Down, 3: Left)                  ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * JUMP dest(L)              :  Jump execution to label dest.                        ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * FJMP dest(L)              :  Jump execution to label dest if T is zero.           ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * NOOP                      :  Do nothing.                                          ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║    * HALT                      :  Halt the EXA.                                        ║");
+System.out.println("║                                                                                        ║");
+System.out.println("║                                                                                        ║");
+System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════╝");
 
-
-*** Agreements !!! ***
-
-    ** There are two standard registers: X and T **
-
-    ** Robot Instructions |> **
-
-      * COPY source(R/N) dest(R)  :  Copies source to dest. *
-
-      * ADDI a(R/N) b(R/N) dest(R):  Adds a + b and saves the result in dest. *
-
-      * SUBI a(R/N) b(R/N) dest(R):  Subtracts a - b and saves the result in dest. *
-
-      * MULI a(R/N) b(R/N) dest(R):  Multiplies a * b and saves the result in dest. *
-
-      * DIVI a(R/N) b(R/N) dest(R):  Divide a / b and saves the result in dest. *
-
-      * MODI a(R/N) b(R/N) dest(R):  Calculate a mod b and saves the result in dest. *
-      
-      * SWIZ a(R/N) b(R/N) dest(R):  Swizzle a by b and saves the result in dest. *
-
-      * TEST a(R/N) = b(R/N)      :  Test if a = b and put 1 in T if true, 0 if not (Can also use < and >). *
-
-      * LINK a(R/N)               :  Move the robot to the next cell (0: Up, 1: Right, 2: Down, 3: Left)
-
-      * JUMP dest(L)              :  Jump execution to label dest. *
-
-      * FJMP dest(L)              :  Jump execution to label dest if T is zero. *
-
-      * NOOP                      :  Do nothing. *
-
-      * HALT                      :  Halt the EXA. *
