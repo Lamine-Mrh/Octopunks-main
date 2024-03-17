@@ -66,6 +66,7 @@ public class App extends JFrame {
         initializeRobot();// Initialise le robot
         initializeRobot(robot); 
         loadMusicFiles(); // Charge les fichiers musicaux
+        playNextMusic(); // Jouer la prochaine music
         initializeLevelsFrame();// Initialise la fenêtre des niveaux
     }
  
