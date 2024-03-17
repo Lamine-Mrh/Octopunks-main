@@ -469,7 +469,8 @@ public class Assembler {
                 }
                 try {
                     robot.getGrid().set(robot.getPos(), 0); // only for Main
-                    c.link(Integer.parseInt(args[0]));
+                    Registre registre = new Registre("Temp", Integer.parseInt(args[0]));
+                    c.link(registre);
                     robot.getGrid().set(robot.getPos(), 1); // only for Main
                 } catch (NumberFormatException e) {
                     throw new Exception("argmuent must be an int");
@@ -585,3 +586,4 @@ public class Assembler {
         robot.setPointer(robot.getPointer() + 1);
     }
 }
+
