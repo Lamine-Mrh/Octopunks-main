@@ -1,0 +1,3 @@
+Objectif:
+Use the jump instrctions to move 
+the robot to the star

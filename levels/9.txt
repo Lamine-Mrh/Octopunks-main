@@ -1,0 +1,3 @@
+Objectif:
+How to find out if a number
+is a palindrome ?

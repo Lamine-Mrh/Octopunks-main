@@ -1,0 +1,2 @@
+Objectif:
+How to calculate the 2^10?

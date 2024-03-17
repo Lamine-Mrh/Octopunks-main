@@ -1,0 +1,2 @@
+Objectif:
+Find pgcd(8762, 586)
