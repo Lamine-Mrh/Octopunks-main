@@ -50,10 +50,10 @@ public class Main {
         System.out.println("║      * MULI a(R/N) b(R/N) dest(R):  Multiply a * b and save the result in destination. ║");
         System.out.println("║      * JUMP dest(L)              :  Jump execution to label destination.               ║");
         System.out.println("║      * FJMP dest(L)              :  Jump execution to label destination if T is zero.  ║");
-        System.out.println("║      * MODI a(R/N) b(R/N) dest(R):  Takes the modulo of a / b and saves result in dest.║");
-        System.out.println("║      * DIVI a(R/N) b(R/N) dest(R): Divides a / b and saves the result in dest.         ║");
-        System.out.println("║      * SWIZ input(R/N) mask(R/N) dest(R):/\"Swizzles\"/ the input,saves the result dest║");
-        System.out.println("║      * TEST a(R/N) ? b(R/N)      :  .                                                  ║");
+        System.out.println("║      * MODI a(R/N) b(R/N) dest(R):  Calculate a mod b and saves the result in dest.    ║");
+        System.out.println("║      * DIVI a(R/N) b(R/N) dest(R):  Divide a / b and saves the result in dest.         ║");
+        System.out.println("║      * SWIZ a(R/N) b(R/N) dest(R):  Swizzle a by b and saves the result in dest.       ║");
+        System.out.println("║      * TEST a(R/N) ? b(R/N)      :  Compares a and b and puts 1 in T if true, 0 if not.║");
         System.out.println("║      * NOOP                      :  Do nothing for a cycle (no operation).             ║");
         System.out.println("║      * LINK dest(L)              :  Traverse the link numbered dest.                   ║");
         System.out.println("║      * HALT                      :  Halt the EXA.                                      ║");
