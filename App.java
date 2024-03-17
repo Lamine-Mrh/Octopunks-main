@@ -6,7 +6,6 @@
  * les valeurs des registres X et T du robot.
  */
 
-
 // Importations pour la gestion des fichiers audio
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -33,8 +32,8 @@ import java.util.List;
 import java.util.Random;
 
 public class App extends JFrame {
-// Composants d'interface utilisateur
-    private JTextArea codeTextArea;//zone de texte pour le code
+    // Composants d'interface utilisateur
+    private JTextArea codeTextArea;// zone de texte pour le code
     private JButton pasButton, stopButton, automatiqueButton;// Boutons pour l'exécution du code
     private GridPanel grid;// Panneau de la grille où se déplace le robot
     private JLabel xLabel, tLabel;// Labels pour afficher les valeurs des registres X et T
@@ -52,7 +51,6 @@ public class App extends JFrame {
 
     private int currentLevel;// Niveau actuellement sélectionné
 
-
     // Méthode pour redimensionner une icône
     private static ImageIcon resizeIcon(ImageIcon icon, int width, int height) {
         Image img = icon.getImage();
@@ -64,36 +62,34 @@ public class App extends JFrame {
     public App() {
         initUI();// Initialise l'interface utilisateur
         initializeRobot();// Initialise le robot
-        initializeRobot(robot); 
+        initializeRobot(robot);
         loadMusicFiles(); // Charge les fichiers musicaux
         playNextMusic(); // Jouer la prochaine music
         initializeLevelsFrame();// Initialise la fenêtre des niveaux
     }
- 
 
     // Initialise l'interface utilisateur
     private void initUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        
 
         // Panneau supérieur contenant les boutons
         JPanel topPanel = new JPanel(new BorderLayout());
         JPanel buttonPanelL = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
-         // Bouton pour la musique
+
+        // Bouton pour la musique
         ImageIcon musicIcon = resizeIcon(new ImageIcon("images/music.png"), 20, 20);
         JButton musicButton = new JButton(musicIcon);
         musicButton.addActionListener(e -> handleMusicButton());
         buttonPanelL.add(musicButton);
 
-         // Bouton pour les instructions
+        // Bouton pour les instructions
         ImageIcon tutoIcon = resizeIcon(new ImageIcon("images/tuto.png"), 20, 20);
         JButton settingsButton = new JButton(tutoIcon);
         settingsButton.addActionListener(e -> handleSettingsButton());
         buttonPanelL.add(settingsButton);
-        
-         // Bouton pour les niveaux
+
+        // Bouton pour les niveaux
         ImageIcon levelsIcon = resizeIcon(new ImageIcon("images/levels.png"), 20, 20);
         JButton levelButton = new JButton(levelsIcon);
         levelButton.addActionListener(e -> handleLevelButton());
@@ -101,26 +97,23 @@ public class App extends JFrame {
 
         topPanel.add(buttonPanelL, BorderLayout.WEST);
 
-
         // Label de bienvenue
         JLabel welcomeLabel = new JLabel("WELCOME TO OCTOPUNK", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 15));
         topPanel.add(welcomeLabel, BorderLayout.CENTER);
 
         add(topPanel, BorderLayout.NORTH);
-        
+
         // Zone de texte pour le code
         codeTextArea = new JTextArea(20, 13);
         JScrollPane codeScrollPane = new JScrollPane(codeTextArea,
-        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(codeScrollPane, BorderLayout.WEST);
-       
-        
+
         // Panneau de la grille
         grid = new GridPanel();
         add(grid, BorderLayout.CENTER);
-        
 
         // Panneau de boutons pour contrôler l'exécution du code
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -143,8 +136,8 @@ public class App extends JFrame {
         buttonPanel.add(tLabel);
 
         add(buttonPanel, BorderLayout.SOUTH);
-        
-         // Fenêtre pour afficher les instructions
+
+        // Fenêtre pour afficher les instructions
         settingsFrame = new JFrame("Instructions");
         settingsFrame.setSize(700, 700);
         settingsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -159,13 +152,12 @@ public class App extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-     
+
     // Gestionnaire d'événement pour le bouton de sélection de niveau
     private Object handleLevelButton() {
         SwingUtilities.invokeLater(() -> levelsFrame.setVisible(true));
         return null;
     }
-    
 
     // Gestionnaire d'événement pour le bouton des instructions
     private Object handleSettingsButton() {
@@ -182,22 +174,26 @@ public class App extends JFrame {
         });
         return null;
     }
-    
+
     // Initialise la fenêtre des niveaux
     private void initializeLevelsFrame() {
         levelsFrame = new JFrame("Levels");
-        levelsFrame.setSize(300, 250);
+        levelsFrame.setSize(300, 260);
         levelsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         levelsFrame.setLayout(new BorderLayout());
 
         JPanel levelsPanel = new JPanel(new BorderLayout());
-        
 
         // Liste des niveaux
-        String[] levels = new String[11];
-        for (int i = 0; i <= 10; i++) {
+        String path = "levels";
+        File dir = new File(path);
+        File[] files = dir.listFiles();
+
+        String[] levels = new String[files.length];
+        for (int i = 0; i <= files.length - 1; i++) {
             levels[i] = "Level " + i;
         }
+        levels[files.length - 1] = "sandbox";
         levelsList = new JList<>(levels);
         levelsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         levelsList.addListSelectionListener(e -> displayObjective());
@@ -215,37 +211,43 @@ public class App extends JFrame {
         levelsFrame.add(levelsPanel, BorderLayout.WEST);
         levelsFrame.add(objectivesPanel, BorderLayout.CENTER);
     }
-    
-    //Affiche l'objectif du niveau sélectionné dans la zone de texte des objectifs.
+
+    // Affiche l'objectif du niveau sélectionné dans la zone de texte des objectifs.
     private void displayObjective() {
+        String levelFilePath;
         // Récupère l'index du niveau sélectionné dans la liste
         int selectedLevelIndex = levelsList.getSelectedIndex();
-         // Vérifie si un niveau est sélectionné
+        // Vérifie si un niveau est sélectionné
         if (selectedLevelIndex >= 0) {
-             // Construit le chemin du fichier contenant l'objectif du niveau
-            String levelFilePath = "levels/" + selectedLevelIndex + ".txt";
+            if (selectedLevelIndex == 11) {
+                levelFilePath = "levels/sandbox.txt";
+            } else
+                levelFilePath = "levels/" + selectedLevelIndex + ".txt";
+
+            // Construit le chemin du fichier contenant l'objectif du niveau
             try {
                 // Lit le contenu du fichier d'objectif
                 String objective = new String(Files.readAllBytes(Paths.get(levelFilePath)), StandardCharsets.UTF_8);
                 // Affiche l'objectif dans la zone de texte des objectifs
                 objectivesTextArea.setText(objective);
             } catch (IOException e) {
-              // Affiche un message d'erreur si le chargement de l'objectif échoue
+                // Affiche un message d'erreur si le chargement de l'objectif échoue
                 JOptionPane.showMessageDialog(this, "Failed to load objective for Level " + selectedLevelIndex, "Error",
                         JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
         }
     }
-    
-    //Charge le niveau sélectionné à partir de la liste des niveaux.
+
+    // Charge le niveau sélectionné à partir de la liste des niveaux.
     private void loadSelectedLevel() {
         // Récupère l'index du niveau sélectionné dans la liste
         int selectedLevelIndex = levelsList.getSelectedIndex();
-        
+
         // Vérifie si un niveau est sélectionné
         if (selectedLevelIndex >= 0) {
-            // Utilise une structure de commutation pour charger le niveau en fonction de son index
+            // Utilise une structure de commutation pour charger le niveau en fonction de
+            // son index
             switch (selectedLevelIndex) {
                 case 0:
                     // Charge le niveau 0
@@ -407,6 +409,7 @@ public class App extends JFrame {
                     break;
 
                 default:
+                    initializeRobot();
                     break;
             }
         }
@@ -420,63 +423,76 @@ public class App extends JFrame {
         return null;
     }
 
-    //Arrête la musique de fond en cours de lecture, si elle est en cours de lecture
+    // Arrête la musique de fond en cours de lecture, si elle est en cours de
+    // lecture
     private void skipSong() {
-        
-        // Vérifie si la musique de fond est en cours de lecture et si le clip n'est pas nul
+
+        // Vérifie si la musique de fond est en cours de lecture et si le clip n'est pas
+        // nul
         if (backgroundMusic != null && backgroundMusic.isRunning()) {
             // Arrête la lecture de la musique de fond
             backgroundMusic.stop();
         }
     }
-    
 
-    //Initialise le robot avec des registres par défaut et des obstacles prédéfinis sur une grille
+    // Initialise le robot avec des registres par défaut et des obstacles prédéfinis
+    // sur une grille
     private void initializeRobot() {
-        // Crée un registre X avec une valeur initiale de 0
-        Registre xRegister = new Registre("X", 0);
-        // Crée un registre T avec une valeur initiale de 0
-        Registre tRegister = new Registre("T", 0);
-        // Crée des obstacles prédéfinis
-        Obstacle o1 = new Obstacle(2, 3);
-        Obstacle o2 = new Obstacle(2, 2);
-        Obstacle o3 = new Obstacle(4, 3);
-        Obstacle o4 = new Obstacle(3, 4);
-        // Ajoute les obstacles à une liste
+
+        /*
+         * Creation de la "sandbox" aléatoire qui acceuille l'utilisateur par une grille
+         * unique dans chaque fois il utilise le programme
+         */
+
+        Random random = new Random();
+        Registre xRegister = new Registre("X", random.nextInt(9999));
+        Registre tRegister = new Registre("T", random.nextInt(9999));
+
+        int x = random.nextInt(5);
+        int y = random.nextInt(5);
+        int n = random.nextInt(24);
+
         ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
-        obstacles.add(o1);
-        obstacles.add(o2);
-        obstacles.add(o3);
-        obstacles.add(o4);
-        // Crée une grille avec les obstacles spécifiés
+
+        for (int i = 1; i < n; i++) {
+            int oX = random.nextInt(5);
+            int oY = random.nextInt(5);
+            if (oX != x && oY != y) {
+                obstacles.add(new Obstacle(oX, oY));
+            }
+
+        }
         Grid grid = new Grid(5, obstacles);
-        // Initialise le robot avec un nom "Robot", les registres X et T créés, une position de départ (0,0) et la grille spécifiée
-        robot = new Robot("Robot", xRegister, tRegister, 0, 0, grid);
-        updateGrid();  // Mise à jour l'affichage de la grille
+
+        robot = new Robot("Robot", xRegister, tRegister, x, y, grid);
+        updateGrid();
     }
-    
+
     /**
- * Initialise le robot avec l'instance spécifiée de Robot.
- * 
- * @param r L'instance de Robot à initialiser.
- */
+     * Initialise le robot avec l'instance spécifiée de Robot.
+     * 
+     * @param r L'instance de Robot à initialiser.
+     */
     public void initializeRobot(Robot r) {
         // Définit l'instance de Robot actuelle avec celle spécifiée
         this.robot = r;
     }
-   
+
     /**
      * Gère l'action du bouton "Pas" qui exécute une seule instruction du code
-     Imprime le pointeur actuel du robot dans la console.
-    * Analyse le code de la zone de texte et exécute l'instruction à l'index du pointeur du robot.
-    * Si le pointeur est valide et qu'il n'a pas atteint la fin du code, exécute l'instruction
+     * Imprime le pointeur actuel du robot dans la console.
+     * Analyse le code de la zone de texte et exécute l'instruction à l'index du
+     * pointeur du robot.
+     * Si le pointeur est valide et qu'il n'a pas atteint la fin du code, exécute
+     * l'instruction
      */
     private void handlePasButton() {
         // Affiche le pointeur actuel du robot dans la console
         System.out.println(robot.getPointer());
         // Analyse le code de la zone de texte pour obtenir les instructions
         ArrayList<String> instructions = parseCode(codeTextArea.getText());
-        // Vérifie si le robot est initialisé et si le pointeur est dans la plage des instructions
+        // Vérifie si le robot est initialisé et si le pointeur est dans la plage des
+        // instructions
         if (robot != null && robot.getPointer() < instructions.size()) {
             System.out.println();// Saut de ligne dans la console
             try {
@@ -486,7 +502,7 @@ public class App extends JFrame {
                 codeTextArea.setEditable(false);
                 // Mise à jour de l'affichage de la grille après l'exécution de l'instruction
                 updateGrid();
-                 // Efface la liste des instructions
+                // Efface la liste des instructions
                 instructions.clear();
             } catch (Exception ex) {
                 // Gère toute exception survenue pendant l'exécution de l'instruction
@@ -494,12 +510,15 @@ public class App extends JFrame {
             }
         }
     }
-    
+
     /**
-    * Gère l'action du bouton "Stop" qui réinitialise l'état du robot et réactive la zone de texte du code.
-    * Si le robot est initialisé, le réinitialise et réactive la zone de texte du code pour permettre une nouvelle entrée.
-    * Met également à jour l'affichage de la grille après la réinitialisation du robot.
-    */
+     * Gère l'action du bouton "Stop" qui réinitialise l'état du robot et réactive
+     * la zone de texte du code.
+     * Si le robot est initialisé, le réinitialise et réactive la zone de texte du
+     * code pour permettre une nouvelle entrée.
+     * Met également à jour l'affichage de la grille après la réinitialisation du
+     * robot.
+     */
     private void handleStopButton() {
         // Vérifie si le robot est initialisé
         if (robot != null) {
@@ -511,22 +530,26 @@ public class App extends JFrame {
             updateGrid();
         }
     }
-    
 
     /**
-   * Gère l'action du bouton "Automatique" qui exécute les instructions du code de manière automatique.
-   * Lorsque le bouton est cliqué, un nouveau thread est créé pour exécuter les instructions du code.
-   * Les instructions sont exécutées une par une avec un délai de 500 millisecondes entre chaque instruction.
-   * Une fois toutes les instructions exécutées, la zone de texte du code est effacée et le pointeur du robot est réinitialisé.
-   */
+     * Gère l'action du bouton "Automatique" qui exécute les instructions du code de
+     * manière automatique.
+     * Lorsque le bouton est cliqué, un nouveau thread est créé pour exécuter les
+     * instructions du code.
+     * Les instructions sont exécutées une par une avec un délai de 500
+     * millisecondes entre chaque instruction.
+     * Une fois toutes les instructions exécutées, la zone de texte du code est
+     * effacée et le pointeur du robot est réinitialisé.
+     */
     private void handleAutomatiqueButton() {
-         // Analyse le code dans la zone de texte et obtient la liste des instructions
+        // Analyse le code dans la zone de texte et obtient la liste des instructions
         ArrayList<String> instructions = parseCode(codeTextArea.getText());
         // Crée un nouveau thread pour exécuter les instructions automatiquement
         new Thread(() -> {
             // Sauvegarde le pointeur de départ du robot
             int startPointer = robot.getPointer();
-            // Boucle tant que le robot est initialisé et que le pointeur est inférieur à la taille des instructions
+            // Boucle tant que le robot est initialisé et que le pointeur est inférieur à la
+            // taille des instructions
             while (robot != null && robot.getPointer() < instructions.size()) {
                 try {
                     // Exécute l'instruction suivante
@@ -542,29 +565,30 @@ public class App extends JFrame {
                     handleException(ex);
                 }
             }
-            // Met à jour l'interface utilisateur pour effacer le contenu de la zone de texte du code
+            // Met à jour l'interface utilisateur pour effacer le contenu de la zone de
+            // texte du code
             SwingUtilities.invokeLater(() -> codeTextArea.setText(""));
             // Réinitialise le pointeur du robot à sa position de départ
             robot.setPointer(startPointer);
         }).start();// Démarre le thread
     }
+
     /**
-    * Gère les exceptions survenues lors de l'exécution des instructions.
-    * Affiche la trace de la pile d'exception dans la console.
-    * 
-    * @param ex L'exception à gérer
-    */
+     * Gère les exceptions survenues lors de l'exécution des instructions.
+     * Affiche la trace de la pile d'exception dans la console.
+     * 
+     * @param ex L'exception à gérer
+     */
 
     private void handleException(Exception ex) {
         // Affiche la trace de la pile d'exception dans la console
         ex.printStackTrace();
     }
-   
-
 
     /**
      * Mise à jour de l'affichage de la grille.
-     * Utilisation de SwingUtilities.invokeLater() pour mettre à jour l'affichage de manière asynchrone.
+     * Utilisation de SwingUtilities.invokeLater() pour mettre à jour l'affichage de
+     * manière asynchrone.
      * Mise à jour des étiquettes associées à la grille.
      */
     private void updateGrid() {
@@ -574,44 +598,45 @@ public class App extends JFrame {
         updateLabels();
     }
 
-
-
-  /**
-   * Mise à jour des étiquettes d'affichage des registres X et T du robot.
-   * Les étiquettes affichent les valeurs actuelles des registres X et T du robot.
-   * Si le robot est null, les étiquettes restent vides.
-   */
+    /**
+     * Mise à jour des étiquettes d'affichage des registres X et T du robot.
+     * Les étiquettes affichent les valeurs actuelles des registres X et T du robot.
+     * Si le robot est null, les étiquettes restent vides.
+     */
     private void updateLabels() {
         if (robot != null) {
-        // Met à jour l'étiquette d'affichage du registre X avec la valeur actuelle du registre X du robot
+            // Met à jour l'étiquette d'affichage du registre X avec la valeur actuelle du
+            // registre X du robot
             xLabel.setText("X: " + robot.getX().getValue());
-        // Met à jour l'étiquette d'affichage du registre T avec la valeur actuelle du registre T du robot
-          
+            // Met à jour l'étiquette d'affichage du registre T avec la valeur actuelle du
+            // registre T du robot
+
             tLabel.setText("T: " + robot.getT().getValue());
         }
     }
 
-   /**
-   * Analyse le code d'assemblage pour le convertir en une liste d'instructions.
-   * 
-   * @param code Le code d'assemblage à analyser.
-   * @return Une liste d'instructions obtenue après l'analyse du code d'assemblage.
-   */
+    /**
+     * Analyse le code d'assemblage pour le convertir en une liste d'instructions.
+     * 
+     * @param code Le code d'assemblage à analyser.
+     * @return Une liste d'instructions obtenue après l'analyse du code
+     *         d'assemblage.
+     */
 
-   private ArrayList<String> parseCode(String code) {
-    // Appelle la méthode de l'assembleur pour analyser le code et le convertir en une liste d'instructions
+    private ArrayList<String> parseCode(String code) {
+        // Appelle la méthode de l'assembleur pour analyser le code et le convertir en
+        // une liste d'instructions
         return assembler.parseAssembleurCode(code);
     }
 
-    
-   /**
-   * Charge les fichiers musicaux à partir du dossier "music".
-   * Les fichiers doivent avoir l'extension ".wav".
-   */
+    /**
+     * Charge les fichiers musicaux à partir du dossier "music".
+     * Les fichiers doivent avoir l'extension ".wav".
+     */
 
     private void loadMusicFiles() {
 
-         // Crée une instance File pour le dossier de musique
+        // Crée une instance File pour le dossier de musique
         File musicFolder = new File("music");
         // Vérifie si le dossier existe et est un répertoire
         if (musicFolder.exists() && musicFolder.isDirectory()) {
@@ -626,12 +651,11 @@ public class App extends JFrame {
         // Mélange la liste des fichiers musicaux pour une lecture aléatoire
         Collections.shuffle(musicFiles);
     }
-   
-    /**
-    * Joue le prochain fichier musical dans la liste des fichiers musicaux.
-    * Si aucun fichier musical n'est disponible, cette méthode ne fait rien.
-    */
 
+    /**
+     * Joue le prochain fichier musical dans la liste des fichiers musicaux.
+     * Si aucun fichier musical n'est disponible, cette méthode ne fait rien.
+     */
 
     private void playNextMusic() {
         // Vérifie si la liste des fichiers musicaux n'est pas vide
@@ -650,7 +674,8 @@ public class App extends JFrame {
                 // Crée un lecteur musical et ouvre le flux audio
                 backgroundMusic = AudioSystem.getClip();
                 backgroundMusic.open(audioInputStream);
-                // Ajoute un écouteur pour détecter la fin de la lecture et passer au prochain fichier
+                // Ajoute un écouteur pour détecter la fin de la lecture et passer au prochain
+                // fichier
                 backgroundMusic.addLineListener(event -> {
                     if (event.getType() == LineEvent.Type.STOP) {
                         playNextMusic();
@@ -664,11 +689,11 @@ public class App extends JFrame {
         }
     }
 
-   /**
-   * Méthode principale pour démarrer l'application.
-   * Crée une instance de l'application et l'affiche.
-   * La taille par défaut de l'application est définie sur 400x337 pixels.
-    */
+    /**
+     * Méthode principale pour démarrer l'application.
+     * Crée une instance de l'application et l'affiche.
+     * La taille par défaut de l'application est définie sur 400x337 pixels.
+     */
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -679,19 +704,20 @@ public class App extends JFrame {
     }
 
     /**
-   * Classe interne représentant le panneau de la grille.
-   * Dessine la grille, le robot et les obstacles sur le panneau.
-   */
+     * Classe interne représentant le panneau de la grille.
+     * Dessine la grille, le robot et les obstacles sur le panneau.
+     */
 
     private class GridPanel extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-        // Calcule la taille de la cellule en fonction de la taille du panneau et de la taille de la grille
+            // Calcule la taille de la cellule en fonction de la taille du panneau et de la
+            // taille de la grille
             int gridWidth = getWidth();
             int gridHeight = getHeight();
             int cellSize = Math.min(gridWidth, gridHeight) / 5;
-           // Dessine les lignes de la grille
+            // Dessine les lignes de la grille
             for (int i = 0; i < 5; i++) {
                 for (int j = 0; j < 5; j++) {
                     g.drawRect(i * cellSize, j * cellSize, cellSize, cellSize);
@@ -722,7 +748,7 @@ public class App extends JFrame {
                     int sratY = 0 * cellSize + cellSize / 2;
                     g.drawString("#", starX, sratY);
                 }
-                
+
                 // Dessine les obstacles
                 for (Obstacle o : robot.getGrid().getObstacles()) {
                     int obstacleX = o.getPosX() * cellSize + cellSize / 2;
