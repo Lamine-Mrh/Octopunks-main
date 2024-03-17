@@ -48,7 +48,7 @@ public class App extends JFrame {
         musicButton.addActionListener(e -> handleMusicButton());
         buttonPanelL.add(musicButton);
 
-        JButton settingsButton = new JButton("S");
+        JButton settingsButton = new JButton("I");
         settingsButton.addActionListener(e -> handleSettingsButton());
         buttonPanelL.add(settingsButton);
 
@@ -94,8 +94,8 @@ public class App extends JFrame {
 
         add(buttonPanel, BorderLayout.SOUTH);
 
-        settingsFrame = new JFrame("Settings");
-        settingsFrame.setSize(400, 300);
+        settingsFrame = new JFrame("Instructions");
+        settingsFrame.setSize(700, 700);
         settingsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         settingsFrame.setLayout(new BorderLayout());
 
