@@ -148,7 +148,17 @@ public class Code {
 
     // Méthode pour exécuter une instruction no-op (aucune opération)
     public void noop() {
-
+        try {
+            Thread.sleep(1000);
+            Random random = new Random();
+            if (random.nextBoolean()) {
+                System.out.println("Amimir");
+            } else {
+                System.out.println("Zzzzzz!");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+}
     }
 
     // Méthode pour arrêter l'exécution du programme
